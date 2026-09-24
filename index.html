@@ -73,6 +73,58 @@
             pointer-events: none;
             z-index: 0;
         }
+
+        /* Modal Transitions */
+        #process-modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #process-modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #process-modal:not(.hidden) {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        #process-modal-content {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+        }
+        #process-modal:not(.hidden) #process-modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* 3D Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+        .group:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        /* Ensure the back side is correctly positioned and styled */
+        .flip-card-back {
+            position: absolute;
+            inset: 0;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
     </style>
 </head>
 <body class="bg-brand-base text-slate-200 font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
@@ -96,19 +148,32 @@
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                         Open to work
                     </div>
-					
-					<a href="https://cdn.jsdelivr.net/gh/rajsingh033/Portfolio@main/RajKamalSinghResume.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cyan-400 text-brand-base hover:bg-cyan-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-					<i data-lucide="eye" class="w-4 h-4"></i> Resume
-					</a>
-
+                    <a href="https://cdn.jsdelivr.net/gh/rajsingh033/Portfolio@main/RajKamalSinghResume.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 bg-cyan-400 text-brand-base hover:bg-cyan-300 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
+                    <i data-lucide="eye" class="w-4 h-4"></i> Resume
+                    </a>
                 </div>
                 
-                <button class="lg:hidden text-slate-400 hover:text-white">
-                    <i data-lucide="menu" class="w-6 h-6"></i>
+                <button id="mobile-menu-btn" type="button" class="lg:hidden p-2 text-slate-400 hover:text-white focus:outline-none cursor-pointer relative z-[70]">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
                 </button>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#0B0F19]/98 backdrop-blur-xl z-[60] hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300">
+        <button id="close-menu-btn" class="absolute top-6 right-6 p-2 text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer z-[70]">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        <div class="flex flex-col items-center gap-8 text-xl font-medium tracking-wide">
+            <a href="#about" class="mobile-link text-slate-300 hover:text-cyan-400 transition-colors">About</a>
+            <a href="#skills" class="mobile-link text-slate-300 hover:text-cyan-400 transition-colors">Skills</a>
+            <a href="#experience" class="mobile-link text-slate-300 hover:text-cyan-400 transition-colors">Experience</a>
+            <a href="#projects" class="mobile-link text-slate-300 hover:text-cyan-400 transition-colors">Projects</a>
+            <a href="#approach" class="mobile-link text-slate-300 hover:text-cyan-400 transition-colors">Approach</a>
+            <a href="#contact" class="mobile-link text-slate-300 hover:text-cyan-400 transition-colors">Contact</a>
+        </div>
+    </div>
 
     <section class="relative pt-32 pb-20 min-h-[90vh] flex flex-col justify-center bg-brand-base overflow-hidden">
         <div class="absolute inset-0 z-0 pointer-events-none opacity-[0.15]"
@@ -116,17 +181,16 @@
         </div>
         
         <div class="container mx-auto px-6 relative z-10 max-w-[1400px] flex-1 flex flex-col justify-center">
-            
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                     <div class="inline-flex items-center gap-2 text-cyan-400 text-base font-mono mb-6 tracking-wide font-medium">
                         <span class="text-cyan-400"></span>// Hi, I'm 
-						<span class="text-slate-100 font-semibold text-base">Raj Kamal Singh</span>
+                        <span class="text-slate-100 font-semibold text-base">Raj Kamal Singh</span>
                     </div>
                     
                     <div class="flex flex-wrap items-center gap-2 px-3 py-1.5 rounded-full border border-slate-700/60 bg-brand-base/80 backdrop-blur-sm text-slate-300 text-xs font-mono mb-8 w-fit">
                         <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
-                        QA Analyst | Manual & Automation Testing | API | SQL | Selenium & Java <span class="text-slate-600">·</span> 3+ Years 
+                        QA Analyst | Manual & Automation Testing | API | SQL | Selenium & Java <span class="text-slate-200">·</span> 3+ Years 
                     </div>
 
                     <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
@@ -145,8 +209,8 @@
                             View My Work <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
                         <a href="https://raw.githubusercontent.com/rajsingh033/Portfolio/main/RajKamalSinghResume.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 border border-slate-700 text-white hover:border-slate-500 bg-transparent hover:bg-slate-800/50">
-						<i data-lucide="download" class="w-4 h-4"></i> Download Resume
-						</a>
+                            <i data-lucide="download" class="w-4 h-4"></i> Download Resume
+                        </a>
                         
                         <div class="flex items-center gap-1.5 ml-1">
                             <a href="https://www.linkedin.com/in/raj-kamal-singh-6a02a5212/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-testid="hero-linkedin-link" class="p-2.5 rounded-full text-slate-500 hover:text-cyan-400 hover:bg-[#00f0ff1a] transition-all duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
@@ -159,7 +223,6 @@
                     <div class="ambient-glow"></div>
                     
                     <div class="bg-[#0f1523]/95 backdrop-blur-xl rounded-2xl border border-slate-700/60 overflow-hidden flex flex-col h-[380px] shadow-[0_0_40px_rgba(34,211,238,0.15)] relative z-10 transition-shadow duration-500 hover:shadow-[0_0_60px_rgba(34,211,238,0.25)] hover:border-cyan-500/30">
-                        
                         <div class="bg-[#151c2c]/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/60">
                             <div class="flex gap-2">
                                 <div class="w-2.5 h-2.5 rounded-full bg-[#ef4444]"></div>
@@ -167,7 +230,7 @@
                                 <div class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></div>
                             </div>
                             <div class="text-[10px] font-mono text-slate-500 tracking-wider">
-                                qa-suite — regression run
+                                LoginTest.java — Selenium regression run
                             </div>
                             <div class="w-4"></div>
                         </div>
@@ -179,20 +242,20 @@
                         </div>
 
                         <div class="grid grid-cols-4 border-t border-slate-700/60 bg-[#151c2c]/50 divide-x divide-slate-700/60 py-4">
-						<div class="text-center">
-                                <div class="text-yellow-400 font-mono font-bold text-xl tracking-tight">6</div>
+                            <div class="text-center">
+                                <div id="stat-total" class="text-yellow-400 font-mono font-bold text-xl tracking-tight">0</div>
                                 <div class="text-[9px] text-slate-500 font-mono uppercase tracking-widest mt-1">TEST CASES</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-emerald-400 font-mono font-bold text-xl tracking-tight">5</div>
+                                <div id="stat-passed" class="text-emerald-400 font-mono font-bold text-xl tracking-tight">0</div>
                                 <div class="text-[9px] text-slate-500 font-mono uppercase tracking-widest mt-1">PASSED</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-rose-400 font-mono font-bold text-xl tracking-tight">1</div>
+                                <div id="stat-failed" class="text-rose-400 font-mono font-bold text-xl tracking-tight">0</div>
                                 <div class="text-[9px] text-slate-500 font-mono uppercase tracking-widest mt-1">FAILED</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-cyan-400 font-mono font-bold text-x2 tracking-tight">83.33%</div>
+                                <div id="stat-rate" class="text-cyan-400 font-mono font-bold text-xl tracking-tight">0%</div>
                                 <div class="text-[9px] text-slate-500 font-mono uppercase tracking-widest mt-1">PASS RATE</div>
                             </div>
                         </div>
@@ -202,7 +265,7 @@
             </div>
         </div>
     </section>
-
+	
 	<div class="border-y border-slate-800/80 bg-brand-alt py-5 overflow-hidden flex relative z-10 shadow-lg rounded-md -translate-y-3">
         <!-- Group 1 -->
         <div class="flex animate-scroll whitespace-nowrap items-center flex-shrink-0">
@@ -329,7 +392,7 @@
         </div>
     </section>
 
-    <section id="skills" class="py-24 bg-brand-base border-t border-slate-800/30">
+    <section id="skills" class="py-20 bg-brand-base border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="mb-12">
                 <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
@@ -343,7 +406,6 @@
                 </p>
             </div>
 
-            <!-- Tab Filters -->
             <div class="flex flex-wrap gap-3 mb-12" id="skill-tabs">
                 <button onclick="filterSkills('All')" class="tab-btn px-6 py-2.5 rounded-full text-[14px] font-mono transition-all duration-300 bg-[#00f0ff08] border-[#00f0ff99] text-[#00f0ff99] border" data-target="All">All</button>
                 <button onclick="filterSkills('Testing')" class="tab-btn px-6 py-2.5 rounded-full text-[13px] font-mono transition-all duration-300 bg-transparent border border-slate-700 text-slate-400 hover:bg-[#ffffff0d] hover:border-slate-700/60 hover:shadow-[0_4_12px_rgba(0,0,0,0.1)] hover:-translate-y-0.5" data-target="Testing">Testing</button>
@@ -453,8 +515,8 @@
             </div>
         </div>
     </section>
-	
-	<section id="experience" class="py-24 bg-brand-alt border-t border-slate-800/30">
+
+    <section id="experience" class="py-20 bg-brand-alt border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="mb-16">
                 <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
@@ -470,14 +532,12 @@
 
             <div class="relative">
                 <div class="relative pl-12 md:pl-16">
-                    
                     <div class="absolute left-0 top-0 bottom-0 w-12 md:w-16 flex flex-col items-center">
                         <div class="w-4 h-4 rounded-full border-[2px] border-cyan-400 bg-brand-base z-10 shadow-[0_0_15px_rgba(34,211,238,0.6)] shrink-0 mt-[26px] md:mt-[34px]"></div>
                         <div class="w-px flex-1 bg-gradient-to-b from-cyan-600/50 via-slate-800/80 to-transparent"></div>
                     </div>
 
                     <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(34,211,238,0.15)] transition-all duration-500 rounded-[20px] p-8 md:p-10 shadow-lg group">
-                        
                         <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-10 pb-8">
                             <div>
                                 <div class="flex items-center gap-4 mb-3">
@@ -493,7 +553,6 @@
                                     </span>
                                 </div>
                             </div>
-                            
                             <div class="px-4 py-1.5 rounded-full border border-emerald-900/50 bg-emerald-900/10 text-emerald-400 text-[10px] font-mono uppercase tracking-widest self-start mt-2">
                                 Current Role
                             </div>
@@ -504,42 +563,34 @@
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Understand requirements and turn them into test scenarios, test cases, and meaningful coverage for new features and changes.</span>
                             </div>
-                            
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Execute manual testing across web and mobile applications, with a focus on finding functional issues, edge cases, and regression risks.</span>
                             </div>
-                            
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Use Selenium WebDriver with Java and TestNG to automate selected repetitive and regression scenarios and support ongoing automation work.</span>
                             </div>
-                            
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Investigate defects, document clear reproduction steps, work with developers on root-cause discussions, and verify fixes before release.</span>
                             </div>
-
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Use SQL to validate application data and backend changes, especially when UI results need to be checked against database records.</span>
                             </div>
-                            
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Validate APIs with Postman and check request, response, and business-rule behavior.</span>
                             </div>
-
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Work closely with developers, UI/UX, and business teams during feature validation, defect resolution, and release activities.</span>
                             </div>
-                            
                             <div class="flex items-start gap-3.5">
                                 <i data-lucide="check-circle-2" class="w-[18px] h-[18px] text-cyan-500 shrink-0 mt-0.5 opacity-90"></i>
                                 <span class="text-[14px] text-slate-300 leading-relaxed">Support release validation and production issue analysis, while improving test coverage and identifying gaps in existing scenarios.</span>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -547,7 +598,7 @@
         </div>
     </section>
 
-    <section id="projects" class="py-24 bg-brand-base border-t border-slate-800/30">
+    <section id="projects" class="py-20 bg-brand-base border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="mb-12">
                 <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
@@ -562,185 +613,218 @@
             </div>
 
             <div class="grid lg:grid-cols-6 gap-6 mt-12">
-                
                 <!-- P.01 -->
-                <div class="flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 rounded-[24px] p-8 lg:col-span-3 shadow-lg group">
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider group-hover:text-cyan-400 transition-colors duration-300">P.01</div>
-                        <div class="flex flex-wrap gap-1.5 justify-end">
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">WEB</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">IOS</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">ANDROID</span>
+                <div class="relative w-full lg:col-span-3 perspective-1000 group h-[400px]">
+                    <div class="w-full h-full relative transition-transform duration-700 transform-style-3d flip-card-inner rounded-[24px]">
+                        
+                        <!-- Front of Card -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[24px] p-8 shadow-lg">
+                            <div class="flex justify-between items-start mb-8">
+                                <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider transition-colors duration-300">P.01</div>
+                                <div class="flex flex-wrap gap-1.5 justify-end">
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">WEB</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">IOS</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">ANDROID</span>
+                                </div>
+                            </div>
+                            <h3 class="text-[24px] font-bold text-white transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Altametrics Enterprise Mobile Suite</h3>
+                            <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 transition-colors duration-300">
+                                Performed end-to-end functional testing for Altametrics mobile applications used for workforce and restaurant operations, including Schedule, Clock, Inventory, and DAR.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">iOS</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Android</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Mobile Testing</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">UI/UX Validation</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">JIRA</span>
+                            </div>
+                            <div class="absolute bottom-6 right-8 text-cyan-400/50 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                                Hover to flip <i data-lucide="corner-down-right" class="w-3 h-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <h3 class="text-[24px] font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Altametrics Enterprise Mobile Suite</h3>
-                    <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 group-hover:text-slate-300 transition-colors duration-300">
-                        Performed end-to-end functional testing for Altametrics mobile applications used for workforce and restaurant operations, including Schedule, Clock, Inventory, and DAR.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">iOS</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Android</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Mobile Testing</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">UI/UX Validation</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">JIRA</span>
-                    </div>
-                    
-                    <div class="mt-auto">
-                        <button onclick="toggleResp('resp-1')" class="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">
-                            <span class="toggle-icon-resp-1 text-[15px] font-normal leading-none mb-0.5">+</span> VIEW RESPONSIBILITIES
-                        </button>
-                        <div id="resp-1" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
-                            <ul class="space-y-2.5 pt-5 mt-3 border-t border-slate-800/50">
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Tested key workflows such as shift scheduling, employee shift swaps, time tracking, and real-time staffing updates.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Validated application behavior and UI/UX across different iOS and Android devices and OS versions.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Reported and tracked defects in JIRA, verified fixes, and performed regression testing for affected workflows.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Performed end-to-end validation to ensure mobile features worked correctly across related business scenarios.</li>
+
+                        <!-- Back of Card -->
+                        <div class="flip-card-back w-full h-full flex flex-col bg-[#161f308c] border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.15)] rounded-[24px] p-8 overflow-y-auto custom-scrollbar">
+                            <h4 class="text-[16px] font-bold text-cyan-400 mb-4 tracking-tight border-b border-slate-700/50 pb-2">Key Responsibilities</h4>
+                            <ul class="space-y-3 pt-2">
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Tested key workflows such as shift scheduling, employee shift swaps, time tracking, and real-time staffing updates.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Validated application behavior and UI/UX across different iOS and Android devices and OS versions.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Reported and tracked defects in JIRA, verified fixes, and performed regression testing for affected workflows.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Performed end-to-end validation to ensure mobile features worked correctly across related business scenarios.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- P.02 -->
-                <div class="flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 rounded-[24px] p-8 lg:col-span-3 shadow-lg group">
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider group-hover:text-cyan-400 transition-colors duration-300">P.02</div>
-                        <div class="flex flex-wrap gap-1.5 justify-end">
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">SQL</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">DATABASE TESTING</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">JIRA</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">EXCEL</span>
+                <div class="relative w-full lg:col-span-3 perspective-1000 group h-[400px]">
+                    <div class="w-full h-full relative transition-transform duration-700 transform-style-3d flip-card-inner rounded-[24px]">
+                        
+                        <!-- Front of Card -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[24px] p-8 shadow-lg">
+                            <div class="flex justify-between items-start mb-8">
+                                <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider transition-colors duration-300">P.02</div>
+                                <div class="flex flex-wrap gap-1.5 justify-end">
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">SQL</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">DATABASE TESTING</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">JIRA</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">EXCEL</span>
+                                </div>
+                            </div>
+                            <h3 class="text-[24px] font-bold text-white transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Data Archive Enhancement</h3>
+                            <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 transition-colors duration-300">
+                                Tested a data archival workflow that moves eligible records from production into an archive schema while preserving data integrity and applying the required retention rules.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Data Archival</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">SQL</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Database Validation</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Data Integrity</span>
+                            </div>
+                            <div class="absolute bottom-6 right-8 text-cyan-400/50 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                                Hover to flip <i data-lucide="corner-down-right" class="w-3 h-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <h3 class="text-[24px] font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Data Archive Enhancement</h3>
-                    <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 group-hover:text-slate-300 transition-colors duration-300">
-                        Tested a data archival workflow that moves eligible records from production into an archive schema while preserving data integrity and applying the required retention rules.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Data Archival</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">SQL</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Database Validation</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Data Integrity</span>
-                    </div>
-                    <div class="mt-auto">
-                        <button onclick="toggleResp('resp-2')" class="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">
-                            <span class="toggle-icon-resp-2 text-[15px] font-normal leading-none mb-0.5">+</span> VIEW RESPONSIBILITIES
-                        </button>
-                        <div id="resp-2" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
-                            <ul class="space-y-2.5 pt-5 mt-3 border-t border-slate-800/50">
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Validated which records were eligible for archival based on retention rules.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Checked is_arch_ready and is_archived values during the archive flow.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Compared records before and after migration to verify data consistency.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Verified archive schemas, database connections, and migrated records using SQL.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Confirmed that production data was removed only after successful archival.</li>
+
+                        <!-- Back of Card -->
+                        <div class="flip-card-back w-full h-full flex flex-col bg-[#161f308c] border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.15)] rounded-[24px] p-8 overflow-y-auto custom-scrollbar">
+                             <h4 class="text-[16px] font-bold text-cyan-400 mb-4 tracking-tight border-b border-slate-700/50 pb-2">Key Responsibilities</h4>
+                            <ul class="space-y-3 pt-2">
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Validated which records were eligible for archival based on retention rules.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Checked is_arch_ready and is_archived values during the archive flow.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Compared records before and after migration to verify data consistency.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Verified archive schemas, database connections, and migrated records using SQL.</li>
+                                <li class="text-[13px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Confirmed that production data was removed only after successful archival.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- P.03 -->
-                <div class="flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 rounded-[24px] p-8 lg:col-span-2 shadow-lg group">
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider group-hover:text-cyan-400 transition-colors duration-300">P.03</div>
-                        <div class="flex flex-wrap gap-1.5 justify-end">
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">CHROME</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">FIREFOX</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">EDGE</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">SAFARI</span>
+                <div class="relative w-full lg:col-span-2 perspective-1000 group h-[400px]">
+                     <div class="w-full h-full relative transition-transform duration-700 transform-style-3d flip-card-inner rounded-[24px]">
+                        
+                        <!-- Front of Card -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[24px] p-8 shadow-lg">
+                            <div class="flex justify-between items-start mb-8">
+                                <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider transition-colors duration-300">P.03</div>
+                                <div class="flex flex-wrap gap-1.5 justify-end">
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">CHROME</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">FIREFOX</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">EDGE</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">SAFARI</span>
+                                </div>
+                            </div>
+                            <h3 class="text-[24px] font-bold text-white transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Transfer In/Out Dashboard</h3>
+                            <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 transition-colors duration-300">
+                                Tested a new Transfer In/Out dashboard that gives users a clear view of transfer activity, including transfer counts, amounts, posting status, and graphical and tabular summaries for both transfer directions.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Dashboard validation</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Regression Testing</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">UI Testing</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">Data reconciliation</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">SQL + JIRA</span>
+                            </div>
+                            <div class="absolute bottom-6 right-8 text-cyan-400/50 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                                Flip <i data-lucide="corner-down-right" class="w-3 h-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <h3 class="text-[24px] font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Transfer In/Out Dashboard</h3>
-                    <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 group-hover:text-slate-300 transition-colors duration-300">
-                        Tested a new Transfer In/Out dashboard that gives users a clear view of transfer activity, including transfer counts, amounts, posting status, and graphical and tabular summaries for both transfer directions.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Dashboard validation</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Regression Testing</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">UI Testing</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">Data reconciliation</span>
-						<span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">SQL + JIRA</span>
-                    </div>
-                    <div class="mt-auto">
-                        <button onclick="toggleResp('resp-3')" class="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">
-                            <span class="toggle-icon-resp-3 text-[15px] font-normal leading-none mb-0.5">+</span> VIEW RESPONSIBILITIES
-                        </button>
-                        <div id="resp-3" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
-                            <ul class="space-y-2.5 pt-5 mt-3 border-t border-slate-800/50">
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Validated dashboard summary tiles, graphs, and tables to ensure transfer counts, amounts, and posted/pending statuses were displayed correctly.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Tested end-to-end transfer workflows for ingredients, prep items, and waste between source and destination stores.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Cross-checked source and destination transfer records after posting to verify inventory accuracy and consistency with the dashboard data.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Used SQL for data validation and reconciliation and tracked defects through JIRA.</li>
+
+                         <!-- Back of Card -->
+                         <div class="flip-card-back w-full h-full flex flex-col bg-[#161f308c] border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.15)] rounded-[24px] p-6 overflow-y-auto custom-scrollbar">
+                             <h4 class="text-[15px] font-bold text-cyan-400 mb-4 tracking-tight border-b border-slate-700/50 pb-2">Key Responsibilities</h4>
+                            <ul class="space-y-3 pt-2">
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Validated dashboard summary tiles, graphs, and tables to ensure transfer counts, amounts, and posted/pending statuses were displayed correctly.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Tested end-to-end transfer workflows for ingredients, prep items, and waste between source and destination stores.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Cross-checked source and destination transfer records after posting to verify inventory accuracy and consistency with the dashboard data.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Used SQL for data validation and reconciliation and tracked defects through JIRA.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- P.04 -->
-                <div class="flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 rounded-[24px] p-8 lg:col-span-2 shadow-lg group">
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider group-hover:text-cyan-400 transition-colors duration-300">P.04</div>
-                        <div class="flex flex-wrap gap-1.5 justify-end">
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">DESKTOP</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">TABLET</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">MOBILE</span>
+                <div class="relative w-full lg:col-span-2 perspective-1000 group h-[400px]">
+                     <div class="w-full h-full relative transition-transform duration-700 transform-style-3d flip-card-inner rounded-[24px]">
+                        
+                        <!-- Front of Card -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[24px] p-8 shadow-lg">
+                            <div class="flex justify-between items-start mb-8">
+                                <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider transition-colors duration-300">P.04</div>
+                                <div class="flex flex-wrap gap-1.5 justify-end">
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">DESKTOP</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">TABLET</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">MOBILE</span>
+                                </div>
+                            </div>
+                            <h3 class="text-[24px] font-bold text-white transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Website & Responsive Testing</h3>
+                            <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 transition-colors duration-300">
+                                Tested websites across different screen sizes and browsers, checking user flows, responsive behavior, content presentation, and common usability issues.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Responsive</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Cross-browser</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">UI</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">Mobile</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">SEO</span>
+                            </div>
+                            <div class="absolute bottom-6 right-8 text-cyan-400/50 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                                Flip <i data-lucide="corner-down-right" class="w-3 h-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <h3 class="text-[24px] font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">Website & Responsive Testing</h3>
-					<p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 group-hover:text-slate-300 transition-colors duration-300">
-                        Tested websites across different screen sizes and browsers, checking user flows, responsive behavior, content presentation, and common usability issues.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Responsive</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">Cross-browser</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">UI</span>
-						<span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">Mobile</span>
-						<span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">SEO</span>
-                    </div>
-                    <div class="mt-auto">
-                        <button onclick="toggleResp('resp-4')" class="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">
-                            <span class="toggle-icon-resp-4 text-[15px] font-normal leading-none mb-0.5">+</span> VIEW RESPONSIBILITIES
-                        </button>
-                        <div id="resp-4" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
-                            <ul class="space-y-2.5 pt-5 mt-3 border-t border-slate-800/50">
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Checked layouts across desktop, tablet, and mobile breakpoints.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Validated navigation, links, forms, and visible content.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Checked basic SEO-related elements and reported inconsistencies affecting the user experience.</li>
+
+                        <!-- Back of Card -->
+                         <div class="flip-card-back w-full h-full flex flex-col bg-[#161f308c] border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.15)] rounded-[24px] p-6 overflow-y-auto custom-scrollbar">
+                             <h4 class="text-[15px] font-bold text-cyan-400 mb-4 tracking-tight border-b border-slate-700/50 pb-2">Key Responsibilities</h4>
+                            <ul class="space-y-3 pt-2">
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Checked layouts across desktop, tablet, and mobile breakpoints.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Validated navigation, links, forms, and visible content.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Checked basic SEO-related elements and reported inconsistencies affecting the user experience.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- P.05 -->
-                <div class="flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 rounded-[24px] p-8 lg:col-span-2 shadow-lg group">
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider group-hover:text-cyan-400 transition-colors duration-300">P.05</div>
-                        <div class="flex flex-wrap gap-1.5 justify-end">
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">N8N</span>
-                            <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">AI MODELS</span>
-							<span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase group-hover:border-slate-500 transition-colors duration-300">WEB APPLICATIONS</span>
+                <div class="relative w-full lg:col-span-2 perspective-1000 group h-[400px]">
+                     <div class="w-full h-full relative transition-transform duration-700 transform-style-3d flip-card-inner rounded-[24px]">
+                        
+                        <!-- Front of Card -->
+                        <div class="absolute inset-0 w-full h-full backface-hidden flex flex-col bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[24px] p-8 shadow-lg">
+                            <div class="flex justify-between items-start mb-8">
+                                <div class="text-teal-600/80 font-mono font-bold text-[13px] tracking-wider transition-colors duration-300">P.05</div>
+                                <div class="flex flex-wrap gap-1.5 justify-end">
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">N8N</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">AI MODELS</span>
+                                    <span class="px-2.5 py-0.5 rounded-full border border-slate-700 bg-transparent text-slate-400 text-[9px] font-mono tracking-widest uppercase transition-colors duration-300">WEB APPLICATIONS</span>
+                                </div>
+                            </div>
+                            <h3 class="text-[24px] font-bold text-white transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">n8n / AI Content Automation</h3>
+                            <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 transition-colors duration-300">
+                                Designed and built an end-to-end n8n workflow to automate website content updates, including glossary and blog publishing. I also tested the complete workflow from trigger to final website output to make sure the automation worked reliably.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">n8n</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">AI</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">Workflow Automation</span>
+                                <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">End-to-End Testing</span>
+                            </div>
+                            <div class="absolute bottom-6 right-8 text-cyan-400/50 flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest animate-pulse">
+                                Flip <i data-lucide="corner-down-right" class="w-3 h-3"></i>
+                            </div>
                         </div>
-                    </div>
-                    <h3 class="text-[24px] font-bold text-white group-hover:text-cyan-400 transition-colors duration-300 mb-4 tracking-tight leading-[1.3]">n8n / AI Content Automation</h3>
-                    <p class="text-slate-400 text-[14px] leading-relaxed mb-8 flex-1 group-hover:text-slate-300 transition-colors duration-300">
-                        Designed and built an end-to-end n8n workflow to automate website content updates, including glossary and blog publishing. I also tested the complete workflow from trigger to final website output to make sure the automation worked reliably.
-                    </p>
-                    <div class="flex flex-wrap gap-2 mb-8">
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">n8n</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide">AI</span>
-                        <span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">Workflow Automation</span>
-						<span class="px-3.5 py-1.5 rounded-full border border-cyan-900/60 bg-transparent text-cyan-400 text-[11px] font-medium tracking-wide mt-1">End-to-End Testing</span>
-                    </div>
-                    <div class="mt-auto">
-                        <button onclick="toggleResp('resp-5')" class="flex items-center gap-2 text-[11px] font-mono font-bold text-slate-400 hover:text-cyan-400 transition-colors uppercase tracking-widest">
-                            <span class="toggle-icon-resp-5 text-[15px] font-normal leading-none mb-0.5">+</span> VIEW RESPONSIBILITIES
-                        </button>
-                        <div id="resp-5" class="max-h-0 opacity-0 overflow-hidden transition-all duration-300 ease-in-out">
-                            <ul class="space-y-2.5 pt-5 mt-3 border-t border-slate-800/50">
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Built the workflow to automate content processing and website updates.</li>
-                                <li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Connected and configured the required workflow steps, web applications, and AI services.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Tested the complete flow from trigger and data processing through content publishing.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Verified generated content for formatting, grammar, consistency, and expected output.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Tested failure scenarios, investigated workflow issues, and verified fixes.</li>
-								<li class="text-[13px] text-slate-400 flex items-start gap-2"><span class="text-cyan-600/50 shrink-0 text-xs">▹</span>Validated the final content on the website after automated updates.</li>
+
+                         <!-- Back of Card -->
+                         <div class="flip-card-back w-full h-full flex flex-col bg-[#161f308c] border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.15)] rounded-[24px] p-6 overflow-y-auto custom-scrollbar">
+                             <h4 class="text-[15px] font-bold text-cyan-400 mb-4 tracking-tight border-b border-slate-700/50 pb-2">Key Responsibilities</h4>
+                            <ul class="space-y-3 pt-2">
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Built the workflow to automate content processing and website updates.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Connected and configured the required workflow steps, web applications, and AI services.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Tested the complete flow from trigger and data processing through content publishing.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Verified generated content for formatting, grammar, consistency, and expected output.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Tested failure scenarios, investigated workflow issues, and verified fixes.</li>
+                                <li class="text-[12px] text-slate-300 flex items-start gap-2"><span class="text-cyan-500 shrink-0 text-xs mt-0.5">▹</span>Validated the final content on the website after automated updates.</li>
                             </ul>
                         </div>
                     </div>
@@ -750,7 +834,7 @@
         </div>
     </section>
 
-    <section id="approach" class="py-24 bg-brand-alt border-t border-slate-800/30">
+    <section id="approach" class="py-20 bg-brand-alt border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="mb-14 text-left">
                 <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
@@ -766,10 +850,10 @@
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- 01 -->
-                <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group">
+                <div onclick="openProcessModal('01')" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group cursor-pointer">
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-2xl font-bold font-mono text-teal-600/90 tracking-tighter group-hover:text-cyan-400 transition-colors duration-300">01</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
+                        <i data-lucide="arrow-right" class="w-5.5 h-6 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
                     </div>
                     <h4 class="text-[18px] font-bold text-white mb-3 tracking-tight">Understand Requirements</h4>
                     <p class="text-[14px] text-slate-400 leading-relaxed">
@@ -777,10 +861,10 @@
                     </p>
                 </div>
                 <!-- 02 -->
-                <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group">
+                <div onclick="openProcessModal('02')" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group cursor-pointer">
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-2xl font-bold font-mono text-teal-600/90 tracking-tighter group-hover:text-cyan-400 transition-colors duration-300">02</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
+                        <i data-lucide="arrow-right" class="w-5.5 h-6 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
                     </div>
                     <h4 class="text-[18px] font-bold text-white mb-3 tracking-tight">Plan the Coverage</h4>
                     <p class="text-[14px] text-slate-400 leading-relaxed">
@@ -788,10 +872,10 @@
                     </p>
                 </div>
                 <!-- 03 -->
-                <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group">
+                <div onclick="openProcessModal('03')" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group cursor-pointer">
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-2xl font-bold font-mono text-teal-600/90 tracking-tighter group-hover:text-cyan-400 transition-colors duration-300">03</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
+                        <i data-lucide="arrow-right" class="w-5.5 h-6 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
                     </div>
                     <h4 class="text-[18px] font-bold text-white mb-3 tracking-tight">Design Test Cases</h4>
                     <p class="text-[14px] text-slate-400 leading-relaxed">
@@ -799,10 +883,10 @@
                     </p>
                 </div>
                 <!-- 04 -->
-                <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group">
+                <div onclick="openProcessModal('04')" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group cursor-pointer">
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-2xl font-bold font-mono text-teal-600/90 tracking-tighter group-hover:text-cyan-400 transition-colors duration-300">04</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
+                        <i data-lucide="arrow-right" class="w-5.5 h-6 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
                     </div>
                     <h4 class="text-[18px] font-bold text-white mb-3 tracking-tight">Execute & Automate</h4>
                     <p class="text-[14px] text-slate-400 leading-relaxed">
@@ -810,10 +894,10 @@
                     </p>
                 </div>
                 <!-- 05 -->
-                <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group">
+                <div onclick="openProcessModal('05')" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group cursor-pointer">
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-2xl font-bold font-mono text-teal-600/90 tracking-tighter group-hover:text-cyan-400 transition-colors duration-300">05</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
+                        <i data-lucide="arrow-right" class="w-5.5 h-6 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
                     </div>
                     <h4 class="text-[18px] font-bold text-white mb-3 tracking-tight">Investigate & Report Defects</h4>
                     <p class="text-[14px] text-slate-400 leading-relaxed">
@@ -821,10 +905,10 @@
                     </p>
                 </div>
                 <!-- 06 -->
-                <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group">
+                <div onclick="openProcessModal('06')" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-8 flex flex-col hover:border-cyan-500/50 hover:shadow-[0_0_20px_rgba(34,211,238,0.07)] transition-all duration-300 group cursor-pointer">
                     <div class="flex justify-between items-start mb-6">
                         <span class="text-2xl font-bold font-mono text-teal-600/90 tracking-tighter group-hover:text-cyan-400 transition-colors duration-300">06</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
+                        <i data-lucide="arrow-right" class="w-5.5 h-6 text-slate-600 group-hover:text-cyan-400 transition-colors"></i>
                     </div>
                     <h4 class="text-[18px] font-bold text-white mb-3 tracking-tight">Retest & Validate the Release</h4>
                     <p class="text-[14px] text-slate-400 leading-relaxed">
@@ -835,11 +919,9 @@
         </div>
     </section>
 
-    <section id="growth" class="py-24 bg-brand-base border-t border-slate-800/30">
+    <section id="growth" class="py-20 bg-brand-base border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
-                
-                <!-- Left Content -->
                 <div>
                     <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
                         // GROWTH
@@ -850,7 +932,6 @@
                     <p class="text-slate-400 text-[18px] leading-relaxed mb-8 max-w-lg">
                         Alongside my manual QA experience, I work with Java, Selenium WebDriver, and TestNG to automate selected test scenarios and repetitive regression checks. I've already applied automation to parts of my ongoing projects and continue to expand the coverage as I identify suitable scenarios.
                     </p>
-                    
                     <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[20px] p-6 flex items-start gap-4 max-w-lg shadow-lg">
                         <div class="p-2.5 bg-[#00f0ff1a] rounded-xl border border-slate-800/60 text-cyan-400 shrink-0">
                             <i data-lucide="sparkles" class="w-5 h-5"></i>
@@ -861,14 +942,9 @@
                     </div>
                 </div>
 
-                <!-- Right Timeline List -->
                 <div class="relative pl-10 md:pl-12 mt-4 lg:mt-0">
-                    <!-- Vertical Connecting Line -->
                     <div class="absolute left-[13px] md:left-[15px] top-8 bottom-8 w-px bg-slate-800"></div>
-                    
                     <div class="flex flex-col gap-4">
-                        
-                        <!-- Item 1: Java (Active) -->
                         <div class="relative group">
                             <div class="absolute -left-10 md:-left-12 top-1/2 -translate-y-1/2 w-[28px] h-[28px] rounded-full bg-[#00f0ff4d] border border-cyan-500/50 text-cyan-400 flex items-center justify-center z-10 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
                                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
@@ -884,7 +960,6 @@
                             </div>
                         </div>
 
-                        <!-- Item 2: Selenium (Active) -->
                         <div class="relative group">
                             <div class="absolute -left-10 md:-left-12 top-1/2 -translate-y-1/2 w-[28px] h-[28px] rounded-full bg-[#00f0ff4d] border border-cyan-500/50 text-cyan-400 flex items-center justify-center z-10 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
                                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
@@ -899,8 +974,7 @@
                                 </div>
                             </div>
                         </div>
-						
-						<!-- Item 3: TestNG (Active) -->
+                        
                         <div class="relative group">
                             <div class="absolute -left-10 md:-left-12 top-1/2 -translate-y-1/2 w-[28px] h-[28px] rounded-full bg-[#00f0ff4d] border border-cyan-500/50 text-cyan-400 flex items-center justify-center z-10 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
                                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
@@ -916,7 +990,6 @@
                             </div>
                         </div>
 
-                        <!-- Item 4: Web Automation (Active) -->
                         <div class="relative group">
                             <div class="absolute -left-10 md:-left-12 top-1/2 -translate-y-1/2 w-[28px] h-[28px] rounded-full bg-[#00f0ff4d] border border-cyan-500/50 text-cyan-400 flex items-center justify-center z-10 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
                                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
@@ -932,7 +1005,6 @@
                             </div>
                         </div>
 
-                        <!-- Item 5: Test Frameworks (Active) -->
                         <div class="relative group">
                             <div class="absolute -left-10 md:-left-12 top-1/2 -translate-y-1/2 w-[28px] h-[28px] rounded-full bg-[#0a1016] border border-slate-800 text-slate-600 flex items-center justify-center z-10">
                                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
@@ -948,7 +1020,6 @@
                             </div>
                         </div>
 
-                        <!-- Item 6: CI/CD (Upcoming) -->
                         <div class="relative group">
                             <div class="absolute -left-10 md:-left-12 top-1/2 -translate-y-1/2 w-[28px] h-[28px] rounded-full bg-[#0a1016] border border-slate-800 text-slate-600 flex items-center justify-center z-10">
                                 <i data-lucide="code" class="w-3.5 h-3.5"></i>
@@ -963,15 +1034,13 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
-    <section class="py-24 bg-brand-alt border-t border-slate-800/30">
+    <section class="py-20 bg-brand-alt border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="mb-10 text-left">
                 <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
@@ -996,7 +1065,7 @@
                 </div>
                 <a href="https://www.hackerrank.com/certificates/e3f36a2c5d60" target="_blank" rel="noopener noreferrer" class="shrink-0 text-[13px] font-medium py-2 px-5 rounded-full border border-slate-700 text-white hover:border-slate-500 bg-transparent hover:bg-slate-800/50 inline-flex items-center gap-2 transition-colors">
                 View Credential <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-				</a>
+                </a>
             </div>
         </div>
     </section>
@@ -1004,32 +1073,31 @@
     <section id="resume" class="py-24 bg-brand-base border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="w-full bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[32px] p-12 md:p-20 text-center shadow-lg">
-                
                 <div class="w-14 h-14 bg-[#00f0ff1a] border border-cyan-900/30 rounded-2xl flex items-center justify-center mx-auto mb-8">
                     <i data-lucide="file-text" class="w-6 h-6 text-cyan-400"></i>
                 </div>
-                
                 <h2 class="text-3xl md:text-[36px] font-bold text-white mb-6 tracking-tight">
                     Want to know more about my experience?
                 </h2>
-                
                 <p class="text-slate-400 mb-10 text-[16px] max-w-xl mx-auto leading-relaxed">
                     Grab the full resume — QA Engineer | Software Tester, 3+ years of enterprise testing, skills, projects, and certification, all on one page.
                 </p>
-                
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
                     <a href="https://raw.githubusercontent.com/rajsingh033/Portfolio/main/RajKamalSinghResume.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-[14px] font-semibold transition-all duration-300 bg-cyan-400 text-brand-base hover:bg-cyan-300">
-					<i data-lucide="download" class="w-4 h-4"></i> Download Resume
-					</a>
+                        <i data-lucide="download" class="w-4 h-4"></i> Download Resume
+                    </a>
                     <a href="https://cdn.jsdelivr.net/gh/rajsingh033/Portfolio@main/RajKamalSinghResume.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-[14px] font-medium transition-all duration-300 border border-slate-700 text-white hover:border-slate-500 bg-transparent hover:bg-slate-800/50">
-                    <i data-lucide="eye" class="w-4 h-4"></i> View Resume
+                        <i data-lucide="eye" class="w-4 h-4"></i> View Resume
                     </a>
                 </div>
+				<button id="mobile-menu-btn" type="button" class="lg:hidden p-2 text-slate-400 hover:text-white focus:outline-none cursor-pointer relative z-[70]">
+                    <i data-lucide="menu" class="w-7 h-7"></i>
+                </button>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="py-24 bg-brand-alt border-t border-slate-800/30">
+    <section id="contact" class="py-20 bg-brand-alt border-t border-slate-800/30">
         <div class="container mx-auto px-6 max-w-[1400px]">
             <div class="mb-12">
                 <div class="text-cyan-400 font-mono text-[12px] uppercase tracking-widest mb-4 font-semibold flex items-center gap-2">
@@ -1044,7 +1112,6 @@
             </div>
 
             <div class="grid lg:grid-cols-2 gap-12 mt-12">
-                <!-- Left: Info Cards -->
                 <div class="flex flex-col gap-4 max-w-[500px]">
                     <div class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[16px] p-5 flex items-center gap-5 hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(34,211,238,0.1)] hover:-translate-y-1 transition-all duration-300 group cursor-default">
                         <span class="w-[42px] h-[42px] rounded-xl bg-[#00f0ff10] border border-[#00f0ff30] flex items-center justify-center text-cyan-400 shrink-0 group-hover:border-[#00f0ff80] group-hover:bg-[#00f0ff1a] transition-all duration-300">
@@ -1087,10 +1154,7 @@
                     </div>
                 </div>
 
-                <!-- Right: Terminal Form -->
                 <form onsubmit="event.preventDefault()" class="bg-[linear-gradient(135deg,#00f0ff12,#3b82f605)] border border-slate-800/60 rounded-[16px] p-8 flex flex-col h-full max-w-[700px]">
-                   
-                    
                     <div class="flex-1 flex flex-col">
                         <div class="grid sm:grid-cols-2 gap-6 mb-6">
                             <div class="space-y-2">
@@ -1117,29 +1181,76 @@
         </div>
     </section>
 
+    <!-- Process Modal -->
+    <div id="process-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-[#0b0f19]/80 backdrop-blur-sm" onclick="closeProcessModal()"></div>
+        
+        <!-- Modal Content -->
+        <div id="process-modal-content" class="relative w-full max-w-2xl bg-[#161f308c] border border-slate-700/60 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-slate-700/60">
+                <div class="flex items-center gap-3">
+                    <span id="modal-step-num" class="text-2xl font-bold font-mono text-cyan-400 tracking-tighter"></span>
+                    <h3 id="modal-title" class="text-xl md:text-2xl font-bold text-white tracking-tight"></h3>
+                </div>
+                <button onclick="closeProcessModal()" class="text-slate-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-slate-800/50">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Body -->
+            <div class="p-6 md:p-8 overflow-y-auto">
+                <p id="modal-description" class="text-[15px] text-slate-300 leading-relaxed mb-8"></p>
+                
+                <div class="mb-8">
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold tracking-wide text-[14px]">
+                        <i data-lucide="check-square" class="w-4 h-4 text-cyan-400"></i> KEY ACTIVITIES
+                    </div>
+                    <ul id="modal-activities" class="space-y-4">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+                
+                <div id="modal-tools-section">
+                    <div class="flex items-center gap-2 mb-4 text-white font-bold tracking-wide text-[14px]">
+                        TOOLS & ARTIFACTS
+                    </div>
+                    <div id="modal-tools" class="flex flex-wrap gap-2">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="p-6 border-t border-slate-700/60 flex justify-end">
+                <button onclick="closeProcessModal()" class="px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-slate-700 text-white hover:border-slate-500 bg-transparent hover:bg-slate-800/50">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-brand-alt border-t border-slate-800/60 py-4">
         <div class="container mx-auto px-6 max-w-[1200px] flex flex-col md:flex-row items-center justify-between gap-6">
-            
             <div class="flex flex-col gap-2 text-center md:text-left">
                 <div class="text-slate-300 text-[14px] tracking-wide">
                     © 2026 Raj Kamal Singh. Built with passion for Quality Assurance.
                 </div>
-                
             </div>
-
             <div class="flex items-center gap-8">
                 <div class="flex items-center gap-2">
                     <a href="https://www.linkedin.com/in/raj-kamal-singh-6a02a5212/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="p-2.5 rounded-full text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                     </a>
                     <a href="https://github.com/rajkamalsingh" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="p-2.5 rounded-full text-slate-500 hover:text-white hover:bg-slate-800/80 transition-colors">
                         <i data-lucide="github" class="w-[18px] h-[18px]"></i>
                     </a>
                     <a href="mailto:rajkamalsingh033@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email" class="p-2.5 rounded-full text-slate-500 hover:text-cyan-400 hover:bg-cyan-500/10 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>
                     </a>
                 </div>
-                
                 <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="w-12 h-12 rounded-full border border-slate-700/80 bg-[#0f1523] flex items-center justify-center text-slate-400 hover:text-cyan-400 transition-all hover:border-cyan-500/50">
                     <i data-lucide="arrow-up" class="w-5 h-5"></i>
                 </button>
@@ -1168,6 +1279,36 @@
             }
         });
 
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMobileMenu() {
+            if (!mobileMenu) return;
+            const isHidden = mobileMenu.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('flex');
+                requestAnimationFrame(() => {
+                    mobileMenu.classList.remove('opacity-0');
+                });
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileMenu.classList.add('opacity-0');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.classList.remove('flex');
+                }, 300);
+                document.body.style.overflow = '';
+            }
+        }
+
+        if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        if (closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMobileMenu));
+
         // ScrollSpy Logic for Navbar Active State
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('.nav-link');
@@ -1177,23 +1318,19 @@
             let current = '';
 
             sections.forEach(section => {
-                const sectionTop = section.offsetTop - 250; // Offset for navbar and padding
+                const sectionTop = section.offsetTop - 250;
                 const sectionHeight = section.offsetHeight;
                 if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
                     current = section.getAttribute('id');
                 }
             });
 
-            // Fallback: Highlight contact section if scrolled to the absolute bottom of the page
             if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight - 100) {
                 current = 'contact';
             }
 
             navLinks.forEach(link => {
-                // Remove active styling
                 link.classList.remove('text-cyan-400');
-                
-                // Add active styling to the current section
                 if (current && link.getAttribute('href') === `#${current}`) {
                     link.classList.add('text-cyan-400');
                 }
@@ -1201,22 +1338,62 @@
         }
 
         window.addEventListener('scroll', highlightNav);
-        highlightNav(); // Initialize on page load
+        highlightNav();
 
-        // Terminal Animation Logic
+        // Terminal Animation Logic with Real Data and Dynamic Stats
         const terminalSequence = [
-            { text: "[PASS] Login validation", delay: 1000, type: "pass" },
-            { text: "[PASS] Regression scenario", delay: 1800, type: "pass" },
-            { text: "[FAIL] Shift-swap scenario", delay: 2500, type: "fail" },
-            { text: "[PASS] Archive flag validation", delay: 3200, type: "pass" },
-            { text: "[PASS] SQL data verification", delay: 4700, type: "pass" },
-            { text: "[PASS] API response validation", delay: 5300, type: "pass" },
-			{ text: "$ qa run --suite regression", delay: 3900, type: "cmd" },
-            { text: "", delay: 5900, type: "cursor" }
+            { text: "WebDriver driver = new ChromeDriver();", delay: 400, type: "code" },
+            { text: "driver.manage().window().maximize();", delay: 300, type: "code" },
+            { text: "", delay: 100, type: "code" },
+            { text: "driver.get(\"https://flipcart.com/login\");", delay: 500, type: "code" },
+            { text: "", delay: 100, type: "code" },
+            { text: "driver.findElement(By.id(\"mobile\")).sendKeys(\"9876543210\")", delay: 400, type: "code" },
+            { text: "", delay: 100, type: "code" },
+            { text: "driver.findElement(By.id(\"pass\")).sendKeys(\"********\")", delay: 400, type: "code" },
+            { text: "", delay: 100, type: "code" },
+            { text: "driver.findElement(By.cssSelector(\".login-btn\").click()", delay: 300, type: "code" },
+            { text: "", delay: 100, type: "code" },
+            { text: "Assert.assertTrue(dashboardPage.isDisplayed());", delay: 600, type: "code" },
+            { text: "", delay: 300, type: "code" },
+            { text: "> Running test suite...", delay: 800, type: "cmd" },
+            { text: "[PASS] Login page loaded", delay: 600, type: "pass" },
+            { text: "[PASS] Credentials submitted", delay: 500, type: "pass" },
+            { text: "[FAIL] OTP timeout edge case", delay: 800, type: "fail" },
+            { text: "[PASS] Dashboard redirect verified", delay: 400, type: "pass" },
+            { text: "", delay: 4000, type: "cursor" }
         ];
 
         const terminalContent = document.getElementById('terminal-content');
         let termIdx = 0;
+        let stats = { total: 0, passed: 0, failed: 0 };
+
+        function resetStats() {
+            stats = { total: 0, passed: 0, failed: 0 };
+            document.getElementById('stat-total').innerText = '0';
+            document.getElementById('stat-passed').innerText = '0';
+            document.getElementById('stat-failed').innerText = '0';
+            document.getElementById('stat-rate').innerText = '0%';
+        }
+
+        function updateStats(type) {
+            if (type === 'pass') {
+                stats.passed++;
+                stats.total++;
+            } else if (type === 'fail') {
+                stats.failed++;
+                stats.total++;
+            }
+
+            if (stats.total > 0) {
+                document.getElementById('stat-total').innerText = stats.total;
+                document.getElementById('stat-passed').innerText = stats.passed;
+                document.getElementById('stat-failed').innerText = stats.failed;
+                
+                let rate = ((stats.passed / stats.total) * 100).toFixed(2);
+                if (rate.endsWith('.00')) rate = parseInt(rate); // Format nicely
+                document.getElementById('stat-rate').innerText = rate + '%';
+            }
+        }
 
         function renderTerminalLines() {
             terminalContent.innerHTML = '';
@@ -1226,9 +1403,10 @@
                 const line = terminalSequence[i];
                 const div = document.createElement('div');
                 
-                if (line.type === 'cmd') div.className = 'text-cyan-400 font-semibold';
+                if (line.type === 'cmd') div.className = 'text-cyan-400 font-semibold mt-2';
                 else if (line.type === 'pass') div.className = 'text-emerald-400';
                 else if (line.type === 'fail') div.className = 'text-rose-400';
+                else if (line.type === 'code') div.className = 'text-slate-400 font-mono';
                 
                 if(line.type === 'cursor') {
                     div.className = 'inline-block w-2 h-[15px] bg-slate-400 cursor-blink mt-1';
@@ -1241,38 +1419,154 @@
         }
 
         function playTerminal() {
+            if (termIdx === 0) resetStats();
+
             if (termIdx < terminalSequence.length) {
+                const currentLine = terminalSequence[termIdx];
                 renderTerminalLines();
-                termIdx++;
                 
-                let nextDelay = termIdx < terminalSequence.length ? 
-                    terminalSequence[termIdx].delay - (termIdx > 0 ? terminalSequence[termIdx-1].delay : 0) : 3000;
+                if (currentLine.type === 'pass' || currentLine.type === 'fail') {
+                    updateStats(currentLine.type);
+                }
+                
+                let nextDelay = currentLine.delay || 1000;
+                termIdx++;
                 
                 setTimeout(playTerminal, nextDelay);
             } else {
                 setTimeout(() => {
                     termIdx = 0;
                     playTerminal();
-                }, 4000);
+                }, 1000);
             }
         }
         
-        setTimeout(playTerminal, terminalSequence[0].delay);
+        setTimeout(playTerminal, 500);
 
-        // Projects Accordion Logic
-        function toggleResp(id) {
-            const el = document.getElementById(id);
-            const icon = document.querySelector(`.toggle-icon-${id}`);
-            
-            if (el.classList.contains('max-h-0')) {
-                el.classList.remove('max-h-0', 'opacity-0');
-                el.classList.add('max-h-[500px]', 'opacity-100');
-                icon.textContent = '-';
-            } else {
-                el.classList.add('max-h-0', 'opacity-0');
-                el.classList.remove('max-h-[500px]', 'opacity-100');
-                icon.textContent = '+';
+        // Process Modal Logic and Data
+        const processData = {
+            1: {
+                title: "Understand Requirements",
+                desc: "The foundation of good testing is a thorough understanding of what is being built. In this phase, I analyze business requirement documents (BRDs), user stories, and acceptance criteria to ensure complete clarity before any testing begins.",
+                activities: [
+                    "Review User Stories and Acceptance Criteria with PMs and Devs.",
+                    "Identify missing requirements, edge cases, and logical loopholes early.",
+                    "Ask clarifying questions in backlog refinement sessions.",
+                    "Define the scope of testing (what is in scope vs out of scope)."
+                ],
+                tools: ["JIRA", "Confluence", "User Stories", "Figma (Mockups)"]
+            },
+            2: {
+                title: "Plan the Coverage",
+                desc: "Before jumping into execution, I create a structured plan to ensure all functional flows and edge cases will be tested effectively without wasting time on redundant scenarios.",
+                activities: [
+                    "Break down large requirements into testable features and components.",
+                    "Identify primary test scenarios and determine the testing techniques needed (functional, UI, API).",
+                    "Evaluate regression risks and plan accordingly.",
+                    "Determine test data and environment requirements."
+                ],
+                tools: ["Test Plan Document", "JIRA", "Excel/Sheets"]
+            },
+            3: {
+                title: "Design Test Cases",
+                desc: "I translate planned scenarios into actionable, clear, and traceable test cases. Well-written test cases serve as a guide for execution and a record for future regression cycles.",
+                activities: [
+                    "Write detailed test cases including preconditions, steps, and expected results.",
+                    "Create both positive (happy path) and negative test cases.",
+                    "Design and prepare the necessary test data.",
+                    "Map test cases to requirements to ensure full coverage (RTM)."
+                ],
+                tools: ["TestLink", "JIRA (Zephyr/Xray)", "Excel"]
+            },
+            4: {
+                title: "Execute & Automate",
+                desc: "This is where the actual testing happens. I run the designed test cases manually and explore the application. For stable, repetitive flows, I write automation scripts to save time.",
+                activities: [
+                    "Execute manual test cases across specified environments and browsers.",
+                    "Perform exploratory testing to catch unpredictable edge cases.",
+                    "Write and maintain Java/Selenium automation scripts for regression scenarios.",
+                    "Validate API responses (Postman) and backend data consistency (SQL)."
+                ],
+                tools: ["Selenium WebDriver", "Java", "TestNG", "Postman", "SQL", "Chrome DevTools"]
+            },
+            5: {
+                title: "Investigate & Report Defects",
+                desc: "When a test fails, I don't just report it; I investigate. A well-reported bug contains all the information a developer needs to reproduce and fix it quickly.",
+                activities: [
+                    "Isolate the bug to ensure it's a genuine issue and not a data or environment problem.",
+                    "Document clear reproduction steps, expected vs. actual results, and attach screenshots/logs.",
+                    "Assign appropriate severity and priority.",
+                    "Participate in defect triage meetings with developers."
+                ],
+                tools: ["JIRA", "Mantis", "Snagit/Loom", "Browser Console Logs"]
+            },
+            6: {
+                title: "Retest & Validate the Release",
+                desc: "The final safety net before the code reaches the user. I verify that reported defects are actually fixed and ensure the fix hasn't broken anything else.",
+                activities: [
+                    "Perform targeted retesting on resolved JIRA tickets.",
+                    "Execute regression test suites (manual and automated) in the staging environment.",
+                    "Support User Acceptance Testing (UAT).",
+                    "Provide sign-off indicating the feature meets the quality threshold for production release."
+                ],
+                tools: ["JIRA", "Jenkins/CI Tools", "Confluence"]
             }
+        };
+
+        const modal = document.getElementById('process-modal');
+        const modalContent = document.getElementById('process-modal-content');
+
+        function openProcessModal(stepIndex) {
+            const data = processData[parseInt(stepIndex)];
+            if (!data) return;
+            
+            // Populate Modal Content
+            document.getElementById('modal-step-num').textContent = `0${stepIndex}`;
+            document.getElementById('modal-title').textContent = data.title;
+            document.getElementById('modal-description').textContent = data.desc;
+            
+            // Populate Activities
+            const activitiesList = document.getElementById('modal-activities');
+            activitiesList.innerHTML = data.activities.map(act => `
+                <li class="text-[14px] text-slate-300 flex items-start gap-3">
+                    <span class="text-cyan-500 shrink-0 mt-0.5"><i data-lucide="play" class="w-3 h-3 fill-current"></i></span>
+                    ${act}
+                </li>
+            `).join('');
+            
+            // Populate Tools
+            const toolsContainer = document.getElementById('modal-tools');
+            if (data.tools && data.tools.length > 0) {
+                document.getElementById('modal-tools-section').style.display = 'block';
+                toolsContainer.innerHTML = data.tools.map(tool => `
+                    <span class="px-4 py-1.5 rounded-full border border-slate-700 bg-[#0B0F19] text-slate-300 text-[12px] font-mono">${tool}</span>
+                `).join('');
+            } else {
+                document.getElementById('modal-tools-section').style.display = 'none';
+            }
+
+            // Show Modal with animation
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small delay for display block to kick in before transition
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+
+            // RE-INITIALIZE ICONS for the newly added HTML content
+            lucide.createIcons();
+        }
+
+        function closeProcessModal() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }, 300);
         }
 
         // Skills Filtering Logic
